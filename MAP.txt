@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comacoe Project Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        #map-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+
+        #map-container>#map {
+            position: relative;
+            z-index: 100;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <section id="map-container">
+        <div id="map"></div>
+    </section>
+
+    <script>
+        // Initialize the map centered on Mumbai with zoom level 5
+        var map = L.map('map').setView([19.0760, 72.8777], 5);
+
+        // Use Google Maps tiles with Leaflet
+        L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            maxZoom: 20,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+        }).addTo(map);
+
+        // Define the different colored icons
+        var blueIcon = L.icon({
+            iconUrl: 'https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi.png',
+            iconSize: [16, 27],
+            iconAnchor: [8, 27],
+            popupAnchor: [1, -24]
+        });
+
+        var redIcon = L.icon({
+            iconUrl: 'https://maps.gstatic.com/mapfiles/api-3/images/red-dot.png',
+            iconSize: [16, 27],
+            iconAnchor: [8, 27],
+            popupAnchor: [1, -24]
+        });
+
+        var purpleIcon = L.icon({
+            iconUrl: 'https://maps.gstatic.com/mapfiles/api-3/images/purple-dot.png',
+            iconSize: [16, 27],
+            iconAnchor: [8, 27],
+            popupAnchor: [1, -24]
+        });
+
+        var yellowIcon = L.icon({
+            iconUrl: 'https://maps.gstatic.com/mapfiles/api-3/images/yellow-dot.png',
+            iconSize: [16, 27],
+            iconAnchor: [8, 27],
+            popupAnchor: [1, -24]
+        });
+
+        var greenIcon = L.icon({
+            iconUrl: 'https://maps.gstatic.com/mapfiles/api-3/images/green-dot.png',
+            iconSize: [16, 27],
+            iconAnchor: [8, 27],
+            popupAnchor: [1, -24]
+        });
+
+        // S&O Projects - Blue Markers
+        const soProjects = [
+            [19.142964, 72.117178],[19.572261, 71.297644],[16.369414, 81.926461], 
+            [16.965697, 82.283556],[16.669383, 82.428683],[16.965719, 82.270978],
+            [19.273722, 71.440900],[20.603431, 81.835542],[21.670378, 72.508250], 
+            [16.965697, 82.283556],[16.667331, 82.473389],[16.657614, 82.456411],
+            [21.670378, 72.508250],[20.603431, 81.835542],[22.222378, 71.658250],
+            [18.437878, 71.876542],[16.445678, 83.765487],[19.168411, 72.761375],
+            [22.066144, 69.834622],[17.682665, 83.298676],[16.697413, 82.528188],
+            [17.623632, 83.241847],[16.803825, 82.280554],[16.685841, 82.399328],
+            [17.551953, 83.298284],[19.215931, 72.112900],[21.086269, 72.603703],
+            [16.968986, 82.283963],[17.671678, 83.305000],[17.020000, 82.380000],
+            [20.916667, 71.500000],[16.669478, 82.428544],[22.523781, 69.660736],
+            [21.674003, 72.512109],[13.163933, 74.760287],[16.993180, 82.496658],
+            [17.062978, 82.555932],[4.781190, 114.461495],[21.689283, 72.432875],
+            [13.316239, 80.344831],[17.002500, 82.340833],[25.539167, 53.135278],
+            [22.473744, 69.834664],[21.655204, 72.295153],[11.501375, 79.854433],
+            [29.685594, 48.800284],[16.995333, 82.375667],[11.858150, 80.008764],
+            [20.216753, 86.600139],[16.969240, 82.283593]
+        ];
+
+        soProjects.forEach(project => {
+            var marker = L.marker([project[0], project[1]], { icon: blueIcon });
+            marker.bindPopup("S&O Project").addTo(map);
+        });
+
+        // EPCC Projects - Red Markers
+        const epccProjects = [
+            [21.0600, 72.6600],  // Extension of Multipurpose Berth 4 (Hazira, Gujarat)
+            [21.0600, 72.6600],  // Development of Ro-Ro Terminal (Hazira, Gujarat)
+            [23.8000, 90.3500],  // River Crossing Transmission Line (Bangladesh)
+            [18.9600, 72.8300],  // Extension of Southern Approach Bridge (Mumbai, Maharashtra)
+            [15.8000, 80.0700],  // Ramayapatnam Port Project (Andhra Pradesh)
+            [22.7300, 69.7000],  // Mundra VLCC Jetty Development (Mundra, Gujarat)
+            [18.9600, 72.8300],  // GTI, JNPT (Mumbai, Maharashtra)
+            [21.0600, 72.6600],  // Hazira Ro-Ro Terminal (Hazira, Gujarat)
+            [21.0600, 72.6600],  // Hazira MPB4 (Hazira, Gujarat)
+            [15.8000, 80.0700],  // Ramayapatnam Port (Andhra Pradesh)
+            [22.7300, 69.7000]   // Mundra (BS) (Mundra, Gujarat)
+        ];
+
+        epccProjects.forEach(project => {
+            var marker = L.marker([project[0], project[1]], { icon: redIcon });
+            marker.bindPopup("EPCC Project").addTo(map);
+        });
+
+        // GFE Projects - Purple Markers
+        const gfeProjects = [
+            [19.0600, 72.8200],  // Geotechnical Investigation for Mumbai Trans Harbour Link Project (Mumbai, Maharashtra)
+            [-20.2200, 57.4600], // Hydrocarbon Jetty (Albion, Mauritius)
+            [20.2700, 86.7000],  // Paradip Port, Odisha
+            [11.7400, 92.7360],  // Andaman and Nicobar Islands (Rutland Island)
+            [4.7774, 7.0134],    // Port Harcourt, Nigeria
+            [10.7711, 79.8428],  // Nagapattinam, Tamil Nadu
+            [18.9300, 72.8200],  // Mumbai Coastal Road Project (Girgaon to Worli, Maharashtra)
+            [16.9600, 82.2400],  // Kakinada Port, Andhra Pradesh
+            [16.9300, 82.2300],  // Off Kakinada Port, Andhra Pradesh
+            [13.2030, 80.2880],  // Kamarajar Port, Ennore, Tamil Nadu
+            [19.0600, 72.8200],  // MTHL (Sewri to Nhava), Mumbai, Maharashtra
+            [19.1100, 72.1800],  // Mumbai High, Maharashtra
+            [21.6417, 72.3600],  // Off Pipavav-Dahej, Gujarat
+            [22.3421, 68.7460],  // Kuranga, Dwarka, Gujarat
+            [17.6800, 83.2200],  // Visakhapatnam, Andhra Pradesh
+            [19.1100, 72.1800],  // Mumbai High Oil Field
+            [6.9700, 93.6200]    // Andaman & Nicobar (Great Nicobar Island)
+        ];
+
+        gfeProjects.forEach(project => {
+            var marker = L.marker([project[0], project[1]], { icon: purpleIcon });
+            marker.bindPopup("GFE Project").addTo(map);
+        });
+
+        // SWIO Projects - Yellow Markers
+        const swioProjects = [
+            [22.7980, 69.7197],  // GLLM, Mundra LNG Terminal (Mundra, Gujarat)
+            [22.3185, 69.1737],  // RSPL, Kuranga Soda Ash Plant (Dwarka, Gujarat
+            [11.2201, 72.7839],  // NIOT, Kadamat, Lakshadweep
+            [11.1030, 72.7336],  // NIOT, Amini, Lakshadweep
+            [11.6860, 72.7086],  // NIOT, Chetlat, Lakshadweep
+            [19.3810, 85.0686],  // BARC, Ganjam (Odisha)
+            [21.6032, 71.2224],  // GPPC Modification, Amreli (Gujarat)
+            [19.2183, 73.0867],  // MIDC Dombivli (Thane, Maharashtra)
+            [13.3409, 74.7421],  // UPCL, Udupi Thermal Power Plant (Udupi, Karnataka)
+            [20.3164, 86.6069],  // IOCL, Paradip (Odisha)
+            [8.3832, 78.0195],   // BHEL, Udangudi (Tamil Nadu)
+            [13.3409, 74.7421],  // UPCL-OFFSHORE (Udupi, Karnataka)
+            [22.3185, 69.1737],  // RSPL Rectification, Dwarka (Gujarat)
+            [23.7336, 68.9396],  // SPWEI, Kutch (Gujarat)
+            [9.6685, 80.0068],   // SUEZ, Jaffna, Sri Lanka
+            [18.3029, 83.8974],  // SIL - Shreas, Srikakulam (Andhra Pradesh)
+            [18.4456, 73.1936]   // GAIL, Raigad (Maharashtra)
+        ];
+
+        swioProjects.forEach(project => {
+            var marker = L.marker([project[0], project[1]], { icon: yellowIcon });
+            marker.bindPopup("SWIO Project").addTo(map);
+        });
+
+        // O&M Projects - Green Markers
+        const omProjects = [
+            [17.6868, 83.2185],  // Visakhapatnam, Andhra Pradesh (HPCL SPM)
+            [12.9141, 74.8560],  // Mangalore, Karnataka (MRPL SPM)
+            [17.7694, 73.0956],  // Dhabol, Maharashtra (RGPPL SPM)
+            [11.0726, 79.6460],  // Tirrukadaiyur, Tamil Nadu (PPN SPM)
+            [21.8762, 69.6342],  // Bhogat, Gujarat (Cairn SPM)
+            [21.1702, 72.8311],  // Hazira, Gujarat (Cairn Production Support)
+            [22.4649, 69.8619],  // Sikka Port, Gujarat (Bharat Oman Refinery SPM)
+            [9.9312, 76.2673]    // Kochi Port, Kerala (Bharat Petroleum SPM)
+        ];
+
+        omProjects.forEach(project => {
+            var marker = L.marker([project[0], project[1]], { icon: greenIcon });
+            marker.bindPopup("O&M Project").addTo(map);
+        });
+
+    </script>
+</body>
+
+</html>
